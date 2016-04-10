@@ -4,16 +4,14 @@ dividend = 1
 fraction_parts = []
 pairs = []
 while True:
-    zeroes = []
     pair = (dividend, n)
     if n > dividend:
         fraction_parts.append('0')
     else:
-        quotient = dividend / n
-        dividend -= quotient * n
+        quotient, remainder = divmod(dividend, n)
+        dividend = remainder
         fraction_parts.append(str(quotient))
-        remainder = dividend % n
-        if dividend == 0:
+        if remainder == 0:
             break
 
     if pair in pairs:
