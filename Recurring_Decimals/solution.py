@@ -9,6 +9,7 @@ n = 2
 n = 7
 n = 195312500
 n = 561
+# n = 210
 
 dividend = 1
 dividend *= 10
@@ -19,20 +20,16 @@ while True:
     zeroes = []
     # pair_candidates = [(dividend, n)]
     if n > dividend:
-        while n > dividend:
-            dividend *= 10
-            zeroes.append('0')
-        fraction_parts.extend(zeroes)
+        fraction_parts.append('0')
+    else:
+        quotient = dividend / n
+        dividend -= quotient * n
+        fraction_parts.append(str(quotient))
+        remainder = dividend % n
+        if dividend == 0:
+            break
 
     pair = (dividend, n)
-
-    quotient = dividend / n
-    dividend -= quotient * n
-    fraction_parts.append(str(quotient))
-    remainder = dividend % n
-    if dividend == 0:
-        break
-
     if pair in pairs:
         fraction_parts = fraction_parts[:-1]
         fraction_parts.insert(0, '(')
