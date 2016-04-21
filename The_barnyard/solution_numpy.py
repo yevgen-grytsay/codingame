@@ -2,6 +2,7 @@ from StringIO import StringIO
 
 import numpy as np
 
+# input_str = None
 input_str = StringIO('''5
 Cows Pegasi Demons Chickens Rabbits
 Eyes 128
@@ -34,15 +35,17 @@ thing_map = {
 }
 A = []
 index_list = [thing_index_map[t] for t in things]
-print index_list
+# print index_list
 for species in species_list:
     constants = [thing_map[species][i] for i in index_list]
     A.append(constants)
 
 Am = zip(*A)
-print Am, number_of_things
+# print Am, number_of_things
 
 a = np.array(Am)
 b = np.array(number_of_things)
 x = np.linalg.solve(a, b)
-print zip(species_list, map(int, x))
+# print zip(species_list, map(int, x))
+for t in zip(species_list, map(lambda n: '%d' % n, x)):
+    print ' '.join(t)
