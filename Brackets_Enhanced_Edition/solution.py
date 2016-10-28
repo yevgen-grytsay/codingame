@@ -32,11 +32,10 @@ class Abc(object):
         return a == b or a == cls.flip(b)
 
 
-def search(chars, context, bracket_context=None, letter_context=None):
+def search(chars, context, bracket_context=None):
     while len(chars) > 0:
         c = chars.pop(0)
         if c.isalnum():
-            letter_context = True
             continue
 
         if c in Abc.brackets:
@@ -53,8 +52,8 @@ def search(chars, context, bracket_context=None, letter_context=None):
                         c = cs
                     else:
                         c = first([
-                            (op, functools.partial(search, chars[:], context[:] + [op], op, letter_context)),
-                            (cs, functools.partial(search, chars[:], context[:-1], prev_context(context) or None, letter_context))
+                            (op, functools.partial(search, chars[:], context[:] + [op], op)),
+                            (cs, functools.partial(search, chars[:], context[:-1], prev_context(context)))
                         ])
                     if c == op:
                         bracket_context = c
