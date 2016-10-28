@@ -1,3 +1,4 @@
+# coding=utf-8
 import functools
 from pprint import pprint
 
@@ -45,12 +46,16 @@ def search(chars, context, bracket_context=None, letter_context=None):
                 continue
             else:
                 if Abc.is_same(bracket_context, c):
+                    # Смотреть оставшиеся символы и отсекать заведомо неверные решения
                     op = Abc.to_opening(c)
                     cs = Abc.flip(op)
-                    c = first([
-                        (op, functools.partial(search, chars[:], context[:] + [op], op, letter_context)),
-                        (cs, functools.partial(search, chars[:], context[:-1], prev_context(context) or None, letter_context))
-                    ])
+                    if count_matching(chars, c) % 2 == 0:
+                        c = cs
+                    else:
+                        c = first([
+                            (op, functools.partial(search, chars[:], context[:] + [op], op, letter_context)),
+                            (cs, functools.partial(search, chars[:], context[:-1], prev_context(context) or None, letter_context))
+                        ])
                     if c == op:
                         bracket_context = c
                         context.append(c)
@@ -83,5 +88,25 @@ def first(tuples):
     raise Exception("Not found: ")
 
 
-literal = '<{[(abc)]}>'
-search(list(literal), [])
+def count_matching(chars, bracket):
+    a = bracket
+    b = Abc.flip(a)
+    return chars.count(a) + chars.count(b)
+
+# literal = '<{[(abc)]}>'
+# search(list(literal), [])
+
+
+n = int(raw_input())
+lines = []
+for i in xrange(n):
+    lines.append(raw_input())
+for i in xrange(n):
+    try:
+        search(list(lines[i]), [])
+        print "true"
+    except:
+        print "false"
+
+    # Write an action using print
+    # To debug: print >> sys.stderr, "Debug messages..."
