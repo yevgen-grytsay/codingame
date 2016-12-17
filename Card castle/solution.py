@@ -6,14 +6,14 @@ for i in xrange(h):
 
 castle = "\n".join(lines)
 castle_rot = "\n".join(map(lambda t: "".join(t), zip(*lines)))
-if castle.find('.\\') > -1 \
-        or castle.find('/.') > -1 \
-        or castle.find('//') > -1 \
-        or castle.find('\\\\') > -1 \
-        or castle_rot.find('\.') > -1 \
-        or castle_rot.find('/.') > -1 \
-        or castle_rot.find('//') > -1 \
-        or castle_rot.find('\\\\') > -1:
+if '.\\' in castle \
+        or '/.' in castle \
+        or '//' in castle \
+        or '\\\\' in castle \
+        or '\.' in castle_rot \
+        or '/.' in castle_rot \
+        or '//' in castle_rot \
+        or '\\\\' in castle_rot:
     print 'UNSTABLE'
 else:
     print 'STABLE'

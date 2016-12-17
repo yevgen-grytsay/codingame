@@ -2,15 +2,15 @@ from StringIO import StringIO
 
 import numpy as np
 
-input_str = None
-# input_str = StringIO('''5
-# Cows Pegasi Demons Chickens Rabbits
-# Eyes 128
-# Heads 61
-# Legs 202
-# Wings 72
-# Horns 34
-# ''')
+# input_str = None
+input_str = StringIO('''5
+Cows Pegasi Demons Chickens Rabbits
+Eyes 128
+Heads 61
+Legs 202
+Wings 72
+Horns 34
+''')
 if input_str:
     def raw_input():
         return next(input_str)
