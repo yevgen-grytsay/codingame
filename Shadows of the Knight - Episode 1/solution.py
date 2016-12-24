@@ -1,5 +1,6 @@
 class Field(object):
-    def __init__(self, width, height, x, y):
+    def __init__(self, width, height, x, y, speed):
+        self.speed = speed
         self.y = y
         self.x = x
         self.min_x = 0
@@ -21,19 +22,19 @@ class Field(object):
 
     def up(self):
         self.max_y = self.y
-        self.y -= (self.y - self.min_y) / 2
+        self.y -= int((self.y - self.min_y) * self.speed)
 
     def down(self):
         self.min_y = self.y
-        self.y = int(round((self.max_y + self.y) / 2.0))
+        self.y += int(round((self.max_y - self.y) * self.speed))
 
     def left(self):
         self.max_x = self.x
-        self.x = (self.x - self.min_x) / 2
+        self.x -= int((self.x - self.min_x) * self.speed)
 
     def right(self):
         self.min_x = self.x
-        self.x += int(round((self.max_x - self.x) / 2.0))
+        self.x += int(round((self.max_x - self.x) * self.speed))
 
     def up_right(self):
         self.up()
@@ -60,11 +61,15 @@ w, h = [int(i) for i in raw_input().split()]
 n = int(raw_input())  # maximum number of turns before game over.
 x0, y0 = [int(i) for i in raw_input().split()]
 
-field = Field(w, h, x0, y0)
-
+field = None
+default_speed = 0.5
 # game loop
 while True:
     bomb_dir = raw_input()  # the direction of the bombs from batman's current location (U, UR, R, DR, D, DL, L or UL)
+
+    if field is None:
+        field = Field(w, h, x0, y0, default_speed)
+
     field.move(bomb_dir)
     # Write an action using print
     # To debug: print >> sys.stderr, "Debug messages..."
