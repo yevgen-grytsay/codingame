@@ -1,7 +1,3 @@
-import sys
-import math
-
-
 def calculate(crew, life_expectancy, duration, capacity):
     low = 20
     high = int(life_expectancy / 2)
@@ -9,7 +5,7 @@ def calculate(crew, life_expectancy, duration, capacity):
 
     for _ in range(0, duration):
         crew = advance_time(crew, life_expectancy, low, high)
-        population = calc_population(crew)
+        population = sum(crew.itervalues())
         if population > capacity:
             return 1
         elif population == 0:
@@ -17,10 +13,6 @@ def calculate(crew, life_expectancy, duration, capacity):
     if population < 200:
         return -1
     return 0
-
-
-def calc_population(crew):
-    return reduce(lambda sum, v: sum + v, crew.itervalues(), 0)
 
 
 def advance_time(crew, life_expectancy, low, high):
@@ -66,6 +58,12 @@ def find_bin_min(fnc, low, high):
 
     return high
 
+
+def create_calc_function(crew, y, c):
+    def fnc(current_expectancy):
+        return calculate(crew, current_expectancy, y, c)
+    return fnc
+
 #
 # Input
 #
@@ -79,14 +77,6 @@ for i in xrange(n):
 
 low_life = 1
 high_life = 200
-valid_expectancy = 0
-
-
-def create_calc_function(crew, y, c):
-    def fnc(current_expectancy):
-        return calculate(crew, current_expectancy, y, c)
-    return fnc
-
 fnc = create_calc_function(crew, y, c)
-low = find_bin_min(fnc, 1, 200)
-print low, find_bin_max(fnc, low, 200)
+low = find_bin_min(fnc, low_life, high_life)
+print low, find_bin_max(fnc, low, high_life)
