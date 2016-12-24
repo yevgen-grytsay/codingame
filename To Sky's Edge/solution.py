@@ -52,6 +52,29 @@ def calc_new_babies(crew, low, high):
 # Auto-generated code below aims at helping you parse
 # the standard input according to the problem statement.
 
+
+def find_bin_max(fnc, low, high):
+    while (low + 1) != high:
+        cur = int(round((low + high) / 2.0))
+        result = fnc(cur)
+        if result == -1 or result == 0:
+            low = cur
+        else:
+            high = cur
+    return low
+
+
+def find_bin_min(fnc, low, high):
+    while (low + 1) != high:
+        cur = int(round((low + high) / 2.0))
+        result = fnc(cur)
+        if result == 1 or result == 0:
+            high = cur
+        else:
+            low = cur
+
+    return high
+
 y = int(raw_input())
 c = int(raw_input())
 n = int(raw_input())
@@ -66,39 +89,13 @@ for i in xrange(n):
 low_life = 1
 high_life = 200
 valid_expectancy = 0
-while True:
-    current_expectancy = int((high_life + low_life) / 2)
-    if current_expectancy == 0:
-        raise Exception("Not found")
 
-    result = calculate(crew, current_expectancy, y, c)
-    if result == 0:
-        valid_expectancy = current_expectancy
-        break
-    elif result == -1:
-        low_life = current_expectancy
-    elif result == 1:
-        high_life = current_expectancy
 
-if valid_expectancy > 0:
-    max_exp = valid_expectancy
-    while True:
-        cur_exp = max_exp + 1
-        result = calculate(crew, cur_exp, y, c)
-        if result == 0:
-            max_exp = cur_exp
-        else:
-            break
+def create_calc_function(crew, y, c):
+    def fnc(current_expectancy):
+        return calculate(crew, current_expectancy, y, c)
+    return fnc
 
-    min_exp = valid_expectancy
-    while True:
-        cur_exp = min_exp - 1
-        result = calculate(crew, cur_exp, y, c)
-        if result == 0:
-            min_exp = cur_exp
-        else:
-            break
-
-    print min_exp, max_exp
-else:
-    print 0
+fnc = create_calc_function(crew, y, c)
+min = find_bin_min(fnc, 1, 200)
+print min, find_bin_max(fnc, min, 200)
