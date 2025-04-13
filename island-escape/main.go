@@ -22,17 +22,31 @@ func main() {
 	scanner.Scan()
 	fmt.Sscan(scanner.Text(), &N)
 
+	board := Board{
+		width:  N,
+		height: N,
+		grid:   make([][]Cell, N),
+	}
+
 	for i := 0; i < N; i++ {
+		board.grid[i] = make([]Cell, N)
 		scanner.Scan()
 		inputs = strings.Split(scanner.Text(), " ")
 		for j := 0; j < N; j++ {
 			elevation, _ := strconv.ParseInt(inputs[j], 10, 32)
-			_ = elevation
+			// _ = elevation
+			board.grid[i][j] = Cell{
+				row:   i,
+				col:   j,
+				index: i*N + j,
+				value: int(elevation),
+			}
 		}
 	}
 
 	// fmt.Fprintln(os.Stderr, "Debug messages...")
-	fmt.Println("maybe") // Write answer to stdout
+	// fmt.Println("maybe") // Write answer to stdout
+	fmt.Println(board.findSolution(N/2, N/2)) // Write answer to stdout
 }
 
 type Cell struct {
