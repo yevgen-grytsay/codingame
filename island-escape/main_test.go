@@ -99,3 +99,40 @@ func TestGetAdjacent2(t *testing.T) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, adjacent, want)
 	}
 }
+
+func TestSearch(t *testing.T) {
+	state := createState(3, 3, []string{
+		"010",
+		"022",
+		"000",
+	})
+
+	want := []Cell{
+		{row: 0, col: 1, index: 1, value: 1},
+	}
+
+	next := state.search(1, 1)
+
+	if !reflect.DeepEqual(want, next) {
+		t.Errorf(`Actual state = %#v, want match for %#v`, next, want)
+	}
+}
+
+func TestSearch2(t *testing.T) {
+	state := createState(3, 3, []string{
+		"010",
+		"022",
+		"010",
+	})
+
+	want := []Cell{
+		{row: 0, col: 1, index: 1, value: 1},
+		{row: 2, col: 1, index: 7, value: 1},
+	}
+
+	next := state.search(1, 1)
+
+	if !reflect.DeepEqual(want, next) {
+		t.Errorf(`Actual state = %#v, want match for %#v`, next, want)
+	}
+}
