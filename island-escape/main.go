@@ -34,6 +34,7 @@ func main() {
 		inputs = strings.Split(scanner.Text(), " ")
 		for j := 0; j < N; j++ {
 			elevation, _ := strconv.ParseInt(inputs[j], 10, 32)
+			fmt.Fprint(os.Stderr, fmt.Sprintf("%d ", elevation))
 			// _ = elevation
 			board.grid[i][j] = Cell{
 				row:   i,
@@ -42,6 +43,7 @@ func main() {
 				value: int(elevation),
 			}
 		}
+		fmt.Fprint(os.Stderr, "\n")
 	}
 
 	// fmt.Fprintln(os.Stderr, "Debug messages...")
@@ -62,27 +64,6 @@ type Board struct {
 	grid   [][]Cell
 }
 
-func (b Board) getAdjacent(row int, col int) []Cell {
-	indices := []struct {
-		i int
-		j int
-	}{
-		{row - 1, col},
-		{row, col - 1},
-		{row, col + 1},
-		{row + 1, col},
-	}
-
-	var result []Cell
-	for _, index := range indices {
-		if index.i >= 0 && index.i < b.height && index.j >= 0 && index.j < b.width {
-			result = append(result, b.grid[index.i][index.j])
-		}
-	}
-
-	return result
-}
-
 func (b Board) getAdjacent2(row int, col int, value int) []Cell {
 	indices := []struct {
 		i int
@@ -98,7 +79,7 @@ func (b Board) getAdjacent2(row int, col int, value int) []Cell {
 	for _, index := range indices {
 		if index.i >= 0 && index.i < b.height && index.j >= 0 && index.j < b.width {
 			cell := b.grid[index.i][index.j]
-			if cell.value == value || cell.value == (value-1) {
+			if cell.value == value || cell.value == (value-1) || cell.value == (value+1) {
 				result = append(result, cell)
 			}
 		}
@@ -109,28 +90,6 @@ func (b Board) getAdjacent2(row int, col int, value int) []Cell {
 
 func (b Board) findSolution(i int, j int) string {
 	root := b.grid[i][j]
-	var q []Cell = []Cell{root}
-
-	for len(q) > 0 {
-		current := q[0]
-		q = q[1:]
-
-		next := b.findNextLevel(current.row, current.col)
-
-		if current.value == 1 && len(next) > 0 {
-			return "yes"
-		}
-
-		q = append(q, next...)
-	}
-
-	return "no"
-}
-
-func (b Board) findNextLevel(i int, j int) []Cell {
-	root := b.grid[i][j]
-
-	var nextIterationCells []Cell
 
 	var q []Cell = []Cell{root}
 	var visited map[int]bool = map[int]bool{
@@ -150,17 +109,13 @@ func (b Board) findNextLevel(i int, j int) []Cell {
 
 			visited[ad.index] = true
 
-			if ad.value == value {
-				q = append(q, ad)
-				continue
+			if ad.value == 0 {
+				return "yes"
 			}
 
-			if ad.value == (value - 1) {
-				nextIterationCells = append(nextIterationCells, ad)
-				continue
-			}
+			q = append(q, ad)
 		}
 	}
 
-	return nextIterationCells
+	return "no"
 }

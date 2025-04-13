@@ -71,10 +71,9 @@ func TestGetAdjacent(t *testing.T) {
 		{row: 0, col: 1, index: 1, value: 1},
 		{row: 1, col: 0, index: 3, value: 2},
 		{row: 1, col: 2, index: 5, value: 2},
-		{row: 2, col: 1, index: 7, value: 0},
 	}
 
-	adjacent := state.getAdjacent(1, 1)
+	adjacent := state.getAdjacent2(1, 1, 2)
 
 	if !reflect.DeepEqual(want, adjacent) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, adjacent, want)
@@ -89,18 +88,19 @@ func TestGetAdjacent2(t *testing.T) {
 	})
 
 	want := []Cell{
-		{row: 0, col: 1, index: 1, value: 1},
-		{row: 1, col: 0, index: 3, value: 2},
+		{row: 0, col: 0, index: 0, value: 0},
+		{row: 0, col: 2, index: 2, value: 0},
+		{row: 1, col: 1, index: 4, value: 2},
 	}
 
-	adjacent := state.getAdjacent(0, 0)
+	adjacent := state.getAdjacent2(0, 1, 1)
 
 	if !reflect.DeepEqual(want, adjacent) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, adjacent, want)
 	}
 }
 
-func TestSearch(t *testing.T) {
+/* func TestSearch(t *testing.T) {
 	state := createState(3, 3, []string{
 		"010",
 		"022",
@@ -135,7 +135,7 @@ func TestSearch2(t *testing.T) {
 	if !reflect.DeepEqual(want, next) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, next, want)
 	}
-}
+} */
 
 func TestFindSolution(t *testing.T) {
 	state := createState(5, 5, []string{
@@ -166,6 +166,25 @@ func TestFindSolution2(t *testing.T) {
 	solution := state.findSolution(1, 2)
 
 	want := "no"
+	if solution != want {
+		t.Errorf(`Actual state = %v, want match for %v`, solution, want)
+	}
+}
+
+func TestFindSolution3(t *testing.T) {
+	state := createState(7, 7, []string{
+		"0000000",
+		"0034310",
+		"0321500",
+		"0234430",
+		"0022110",
+		"0000000",
+		"0001100",
+	})
+
+	solution := state.findSolution(3, 3)
+
+	want := "yes"
 	if solution != want {
 		t.Errorf(`Actual state = %v, want match for %v`, solution, want)
 	}
