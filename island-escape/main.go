@@ -91,7 +91,7 @@ func (b Board) getAdjacent2(row int, col int, value int) []Cell {
 	return result
 }
 
-func (b Board) search(i int, j int) []Cell {
+func (b Board) findNextLevel(i int, j int) []Cell {
 	root := b.grid[i][j]
 
 	var nextIterationCells []Cell

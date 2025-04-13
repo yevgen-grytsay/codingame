@@ -111,7 +111,7 @@ func TestSearch(t *testing.T) {
 		{row: 0, col: 1, index: 1, value: 1},
 	}
 
-	next := state.search(1, 1)
+	next := state.findNextLevel(1, 1)
 
 	if !reflect.DeepEqual(want, next) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, next, want)
@@ -130,7 +130,7 @@ func TestSearch2(t *testing.T) {
 		{row: 2, col: 1, index: 7, value: 1},
 	}
 
-	next := state.search(1, 1)
+	next := state.findNextLevel(1, 1)
 
 	if !reflect.DeepEqual(want, next) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, next, want)
