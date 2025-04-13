@@ -136,3 +136,37 @@ func TestSearch2(t *testing.T) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, next, want)
 	}
 }
+
+func TestFindSolution(t *testing.T) {
+	state := createState(5, 5, []string{
+		"00000",
+		"00500",
+		"03400",
+		"02200",
+		"00100",
+	})
+
+	solution := state.findSolution(1, 2)
+
+	want := "yes"
+	if solution != want {
+		t.Errorf(`Actual state = %v, want match for %v`, solution, want)
+	}
+}
+
+func TestFindSolution2(t *testing.T) {
+	state := createState(5, 5, []string{
+		"00000",
+		"00500",
+		"03400",
+		"02200",
+		"00000",
+	})
+
+	solution := state.findSolution(1, 2)
+
+	want := "no"
+	if solution != want {
+		t.Errorf(`Actual state = %v, want match for %v`, solution, want)
+	}
+}

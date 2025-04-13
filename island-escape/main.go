@@ -82,13 +82,35 @@ func (b Board) getAdjacent2(row int, col int, value int) []Cell {
 
 	var result []Cell
 	for _, index := range indices {
-		cell := b.grid[index.i][index.j]
-		if index.i >= 0 && index.i < b.height && index.j >= 0 && index.j < b.width && cell.value == value {
-			result = append(result, cell)
+		if index.i >= 0 && index.i < b.height && index.j >= 0 && index.j < b.width {
+			cell := b.grid[index.i][index.j]
+			if cell.value == value || cell.value == (value-1) {
+				result = append(result, cell)
+			}
 		}
 	}
 
 	return result
+}
+
+func (b Board) findSolution(i int, j int) string {
+	root := b.grid[i][j]
+	var q []Cell = []Cell{root}
+
+	for len(q) > 0 {
+		current := q[0]
+		q = q[1:]
+
+		next := b.findNextLevel(current.row, current.col)
+
+		if current.value == 1 && len(next) > 0 {
+			return "yes"
+		}
+
+		q = append(q, next...)
+	}
+
+	return "no"
 }
 
 func (b Board) findNextLevel(i int, j int) []Cell {
@@ -105,7 +127,7 @@ func (b Board) findNextLevel(i int, j int) []Cell {
 		current := q[0]
 		q = q[1:]
 		value := current.value
-		adjacent := b.getAdjacent2(current.row, current.col, value-1)
+		adjacent := b.getAdjacent2(current.row, current.col, value)
 
 		for _, ad := range adjacent {
 			if _, ok := visited[ad.index]; ok {
