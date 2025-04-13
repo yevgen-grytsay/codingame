@@ -64,7 +64,7 @@ type Board struct {
 	grid   [][]Cell
 }
 
-func (b Board) getAdjacent2(row int, col int, value int) []Cell {
+func (b Board) getAdjacent(row int, col int, value int) []Cell {
 	indices := []struct {
 		i int
 		j int
@@ -100,7 +100,7 @@ func (b Board) findSolution(i int, j int) string {
 		current := q[0]
 		q = q[1:]
 		value := current.value
-		adjacent := b.getAdjacent2(current.row, current.col, value)
+		adjacent := b.getAdjacent(current.row, current.col, value)
 
 		for _, ad := range adjacent {
 			if _, ok := visited[ad.index]; ok {

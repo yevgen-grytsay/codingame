@@ -73,7 +73,7 @@ func TestGetAdjacent(t *testing.T) {
 		{row: 1, col: 2, index: 5, value: 2},
 	}
 
-	adjacent := state.getAdjacent2(1, 1, 2)
+	adjacent := state.getAdjacent(1, 1, 2)
 
 	if !reflect.DeepEqual(want, adjacent) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, adjacent, want)
@@ -93,49 +93,12 @@ func TestGetAdjacent2(t *testing.T) {
 		{row: 1, col: 1, index: 4, value: 2},
 	}
 
-	adjacent := state.getAdjacent2(0, 1, 1)
+	adjacent := state.getAdjacent(0, 1, 1)
 
 	if !reflect.DeepEqual(want, adjacent) {
 		t.Errorf(`Actual state = %#v, want match for %#v`, adjacent, want)
 	}
 }
-
-/* func TestSearch(t *testing.T) {
-	state := createState(3, 3, []string{
-		"010",
-		"022",
-		"000",
-	})
-
-	want := []Cell{
-		{row: 0, col: 1, index: 1, value: 1},
-	}
-
-	next := state.findNextLevel(1, 1)
-
-	if !reflect.DeepEqual(want, next) {
-		t.Errorf(`Actual state = %#v, want match for %#v`, next, want)
-	}
-}
-
-func TestSearch2(t *testing.T) {
-	state := createState(3, 3, []string{
-		"010",
-		"022",
-		"010",
-	})
-
-	want := []Cell{
-		{row: 0, col: 1, index: 1, value: 1},
-		{row: 2, col: 1, index: 7, value: 1},
-	}
-
-	next := state.findNextLevel(1, 1)
-
-	if !reflect.DeepEqual(want, next) {
-		t.Errorf(`Actual state = %#v, want match for %#v`, next, want)
-	}
-} */
 
 func TestFindSolution(t *testing.T) {
 	state := createState(5, 5, []string{
