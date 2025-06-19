@@ -87,3 +87,19 @@ func TestGetNeighborsError(t *testing.T) {
 
 	b.GetNeighbors(node)
 }
+
+func TestFindSum(t *testing.T) {
+	b := Board{}
+
+	b.ParseAndAddRow("1")
+	b.ParseAndAddRow("12")
+	b.SetPrizes([]int{100, 100, 100})
+
+	rootNode := b.GetRootNode()
+	sum := findSum(b, rootNode.value, rootNode)
+	want := 300
+
+	if !reflect.DeepEqual(want, sum) {
+		t.Errorf(`Actual sum = %v, want match for %v`, sum, want)
+	}
+}

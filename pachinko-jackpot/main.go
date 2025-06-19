@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -20,6 +21,10 @@ import (
 type Board struct {
 	rows   [][]int
 	prizes []int
+}
+
+func (b Board) GetHeight() int {
+	return len(b.rows)
 }
 
 func (b *Board) ParseAndAddRow(row string) {
@@ -80,6 +85,27 @@ type Node struct {
 
 var board = Board{}
 
+func findSum(b Board, multiplier int, node Node) int {
+	maxRowIndex := b.GetHeight() - 1
+	if node.row == maxRowIndex {
+		prizeA := b.prizes[node.col]
+		prizeB := b.prizes[node.col+1]
+
+		return multiplier * maxInt(prizeA, prizeB)
+	}
+
+	nodeA, nodeB := b.GetNeighbors(node)
+
+	sumA := findSum(b, multiplier+nodeA.value, nodeA)
+	sumB := findSum(b, multiplier+nodeB.value, nodeB)
+
+	return maxInt(sumA, sumB)
+}
+
+func maxInt(a, b int) int {
+	return int(math.Max(float64(a), float64(b)))
+}
+
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Buffer(make([]byte, 1000000), 1000000)
@@ -108,5 +134,8 @@ func main() {
 	board.SetPrizes(totalPrizes)
 
 	fmt.Fprintln(os.Stderr, board)
-	fmt.Println("jackpot") // Write answer to stdout
+	// fmt.Println("jackpot") // Write answer to stdout
+
+	rootNode := board.GetRootNode()
+	fmt.Println(findSum(board, rootNode.value, rootNode)) // Write answer to stdout
 }
