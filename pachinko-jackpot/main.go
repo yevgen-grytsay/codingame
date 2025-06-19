@@ -54,6 +54,24 @@ func (b Board) String() string {
 	return strings.Join(parts, "\n")
 }
 
+func (b Board) GetRootNode() Node {
+	return Node{
+		row:   0,
+		col:   0,
+		value: b.rows[0][0],
+	}
+}
+
+func (b Board) GetNeighbors(node Node) (Node, Node) {
+	nextRowIndex := node.row + 1
+	if nextRowIndex >= len(b.rows) {
+		panic(fmt.Sprintf("invalid row index %d (total rows: %d)", nextRowIndex, len(b.rows)))
+	}
+
+	return Node{row: nextRowIndex, col: node.col, value: b.rows[nextRowIndex][node.col]},
+		Node{row: nextRowIndex, col: node.col + 1, value: b.rows[nextRowIndex][node.col+1]}
+}
+
 type Node struct {
 	row   int
 	col   int
