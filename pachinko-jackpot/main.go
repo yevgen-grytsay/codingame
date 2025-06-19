@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 /**
@@ -14,6 +16,51 @@ import (
  * rest are read in a loop due to a current limitation in
  * stub generation. The number of prizes is (1 + height)
  **/
+
+type Board struct {
+	rows   [][]int
+	prizes []int
+}
+
+func (b *Board) ParseAndAddRow(row string) {
+	expectedLength := len(b.rows) + 1
+	if len(row) != expectedLength {
+		panic(fmt.Errorf("expected lenght of a new row is %d, but actual is %d", expectedLength, len(row)))
+	}
+
+	list := strings.Split(row, "")
+	var newRow []int
+
+	for _, s := range list {
+		value, _ := strconv.Atoi(s)
+		newRow = append(newRow, value)
+	}
+
+	b.rows = append(b.rows, newRow)
+}
+
+func (b *Board) SetPrizes(prizes []int) {
+	b.prizes = prizes
+}
+
+func (b Board) String() string {
+	var parts []string
+	for i := 0; i < len(b.rows); i++ {
+		parts = append(parts, fmt.Sprintf("%#v", b.rows[i]))
+	}
+
+	parts = append(parts, fmt.Sprintf("%#v", b.prizes))
+
+	return strings.Join(parts, "\n")
+}
+
+type Node struct {
+	row   int
+	col   int
+	value int
+}
+
+var board = Board{}
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
@@ -26,17 +73,22 @@ func main() {
 	for i := 0; i < height; i++ {
 		scanner.Scan()
 		increments := scanner.Text()
-		_ = increments // to avoid unused error
+		board.ParseAndAddRow(increments)
+		// _ = increments // to avoid unused error
 	}
-	var prize1 int
-	scanner.Scan()
-	fmt.Sscan(scanner.Text(), &prize1)
-	for i := 0; i < height; i++ {
+	// var prize1 int
+	// scanner.Scan()
+	// fmt.Sscan(scanner.Text(), &prize1)
+	var totalPrizes = make([]int, height+1)
+	for i := 0; i <= height; i++ {
 		var prize int
 		scanner.Scan()
 		fmt.Sscan(scanner.Text(), &prize)
+		totalPrizes[i] = prize
 	}
 
-	// fmt.Fprintln(os.Stderr, "Debug messages...")
+	board.SetPrizes(totalPrizes)
+
+	fmt.Fprintln(os.Stderr, board)
 	fmt.Println("jackpot") // Write answer to stdout
 }
