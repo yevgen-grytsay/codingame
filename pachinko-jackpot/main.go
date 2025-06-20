@@ -85,6 +85,59 @@ type Node struct {
 
 var board = Board{}
 
+func findSum2(b Board) int {
+	var sums = []int{
+		b.GetRootNode().value,
+	}
+
+	sumF := func(a, b int) int {
+		return a + b
+	}
+	mulF := func(a, b int) int {
+		return a * b
+	}
+
+	op := sumF
+
+	rows := append(b.rows[1:], b.prizes)
+
+	var newSums []int
+
+	for i, row := range rows {
+		if i == (len(rows) - 1) {
+			op = mulF
+		} else {
+			op = sumF
+		}
+
+		newSums = make([]int, len(row))
+		var lastIndex = len(row) - 1
+		// var lastSum = sums[len(sums)-1]
+		// newSums[0] = sums[0] + row[0]
+		// newSums[lastIndex] = lastSum + row[lastIndex]
+
+		for col, mul := range row {
+			var a, b int
+			var isFirstCol = col == 0
+			var isLastCol = col == lastIndex
+
+			if !isFirstCol {
+				a = op(sums[col-1], mul)
+			}
+
+			if !isLastCol {
+				b = op(sums[col], mul)
+			}
+
+			newSums[col] = maxInt(a, b)
+		}
+
+		sums = newSums
+	}
+
+	return maxInx2(newSums...)
+}
+
 func findSum(b Board, multiplier int, node Node) int {
 	maxRowIndex := b.GetHeight() - 1
 	if node.row == maxRowIndex {
@@ -104,6 +157,17 @@ func findSum(b Board, multiplier int, node Node) int {
 
 func maxInt(a, b int) int {
 	return int(math.Max(float64(a), float64(b)))
+}
+
+func maxInx2(values ...int) int {
+	var max = math.MinInt
+	for _, val := range values {
+		if val > max {
+			max = val
+		}
+	}
+
+	return max
 }
 
 func main() {
@@ -136,6 +200,7 @@ func main() {
 	fmt.Fprintln(os.Stderr, board)
 	// fmt.Println("jackpot") // Write answer to stdout
 
-	rootNode := board.GetRootNode()
-	fmt.Println(findSum(board, rootNode.value, rootNode)) // Write answer to stdout
+	// rootNode := board.GetRootNode()
+	// fmt.Println(findSum(board, rootNode.value, rootNode)) // Write answer to stdout
+	fmt.Println(findSum2(board)) // Write answer to stdout
 }
