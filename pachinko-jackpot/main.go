@@ -85,7 +85,7 @@ type Node struct {
 
 var board = Board{}
 
-func findSum2(b Board) int {
+func findSum(b Board) int {
 	var sums = []int{
 		b.GetRootNode().value,
 	}
@@ -112,9 +112,6 @@ func findSum2(b Board) int {
 
 		newSums = make([]int, len(row))
 		var lastIndex = len(row) - 1
-		// var lastSum = sums[len(sums)-1]
-		// newSums[0] = sums[0] + row[0]
-		// newSums[lastIndex] = lastSum + row[lastIndex]
 
 		for col, mul := range row {
 			var a, b int
@@ -136,23 +133,6 @@ func findSum2(b Board) int {
 	}
 
 	return maxInx2(newSums...)
-}
-
-func findSum(b Board, multiplier int, node Node) int {
-	maxRowIndex := b.GetHeight() - 1
-	if node.row == maxRowIndex {
-		prizeA := b.prizes[node.col]
-		prizeB := b.prizes[node.col+1]
-
-		return multiplier * maxInt(prizeA, prizeB)
-	}
-
-	nodeA, nodeB := b.GetNeighbors(node)
-
-	sumA := findSum(b, multiplier+nodeA.value, nodeA)
-	sumB := findSum(b, multiplier+nodeB.value, nodeB)
-
-	return maxInt(sumA, sumB)
 }
 
 func maxInt(a, b int) int {
@@ -182,11 +162,8 @@ func main() {
 		scanner.Scan()
 		increments := scanner.Text()
 		board.ParseAndAddRow(increments)
-		// _ = increments // to avoid unused error
 	}
-	// var prize1 int
-	// scanner.Scan()
-	// fmt.Sscan(scanner.Text(), &prize1)
+
 	var totalPrizes = make([]int, height+1)
 	for i := 0; i <= height; i++ {
 		var prize int
@@ -198,9 +175,6 @@ func main() {
 	board.SetPrizes(totalPrizes)
 
 	fmt.Fprintln(os.Stderr, board)
-	// fmt.Println("jackpot") // Write answer to stdout
 
-	// rootNode := board.GetRootNode()
-	// fmt.Println(findSum(board, rootNode.value, rootNode)) // Write answer to stdout
-	fmt.Println(findSum2(board)) // Write answer to stdout
+	fmt.Println(findSum(board)) // Write answer to stdout
 }
